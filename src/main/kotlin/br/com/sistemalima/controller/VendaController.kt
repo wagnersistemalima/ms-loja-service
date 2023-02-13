@@ -17,12 +17,17 @@ class VendaController(
 
     private val logger = LoggerFactory.getLogger(VendaController::class.java)
 
+    companion object {
+        private val tag = "class: VendaController"
+        private val tagRealizarVenda = "method: realizarVenda [POST]"
+    }
+
     @Post
     fun realizarVenda(@Body vendaInput: VendaInput): HttpResponse<Veiculo> {
         val observabilidade = Observabilidade(vendaInput.cliente, vendaInput.veiculo)
-        logger.info("Inicio do processo request: $observabilidade")
+        logger.info(String.format("$tag, ${tagRealizarVenda}, Inicio do processo request: $observabilidade"))
         val veiculo = vendaService.realizarVenda(vendaInput, observabilidade)
-        logger.info("Fim do processo request: $observabilidade")
-        return HttpResponse.ok<Veiculo?>().body(veiculo)
+        logger.info(String.format("$tag, $tagRealizarVenda, Fim do processo request: $observabilidade"))
+        return HttpResponse.ok(veiculo)
     }
 }
